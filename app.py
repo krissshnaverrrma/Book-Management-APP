@@ -119,26 +119,25 @@ def login():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        email_addr = request.form.get('email')  # <--- USING EMAIL
+        username = request.form.get('username')
         name = request.form.get('name')
         password = request.form.get('password')
         recovery = request.form.get('recovery_answer').lower().strip()
-        user = User.query.filter_by(
-            email=email_addr).first()  # <--- QUERY BY EMAIL
+        user = User.query.filter_by(username=username).first()
         if user:
-            flash('Email already registered', 'error')
+            flash('Username already exists', 'error')
             return redirect(url_for('register'))
 
         new_user = User(
-            email=email_addr, name=name, recovery_answer=recovery,  # <--- SAVE EMAIL
+            username=username, name=name, recovery_answer=recovery,
             password=generate_password_hash(password, method='pbkdf2:sha256')
         )
         db.session.add(new_user)
         db.session.commit()
 
         send_email(
-            subject="Welcome to Book-Management-APP!", recipient=email_addr,
-            template='welcome_mail', name=name, username=email_addr
+            subject="Welcome to Book-Management-APP!", recipient=app.config['MAIL_USERNAME'],
+            template='welcome_mail', name=name, username=username
         )
 
         login_user(new_user)

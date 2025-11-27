@@ -61,7 +61,12 @@
                 <input type="text" name="name" value="{{ current_user.name }}"
                     class="form-control bg-transparent text-white" style="border: 1px solid rgba(255,255,255,0.2);">
             </div>
-
+            <div class="mb-3">
+                <label class="form-label text-white-50 small">Email Address</label>
+                <input type="email" name="email" value="{{ current_user.email }}"
+                    class="form-control bg-transparent text-white" required
+                    style="border: 1px solid rgba(255,255,255,0.2);">
+            </div>
             <div class="mb-3">
                 <label class="form-label text-white-50 small">Username</label>
                 <input type="text" name="username" value="{{ current_user.username }}"
@@ -79,7 +84,7 @@
                     <i class="fas fa-save me-2"></i>Save Changes
                 </button>
 
-                <a href="/profile" class="btn btn-outline-secondary w-100 rounded-pill py-2">
+                <a href="/profile" class="btn btn-outline-secondary w-100 rounded-pill fw-bold py-2">
                     <i class="fas fa-times-circle me-2"></i>Cancel
                 </a>
 

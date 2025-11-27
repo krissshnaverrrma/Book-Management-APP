@@ -10,6 +10,7 @@ import io
 from flask_mail import Mail, Message
 from datetime import datetime, timedelta
 import secrets
+import socket
 
 load_dotenv()
 
@@ -76,14 +77,21 @@ def allowed_file(filename):
 
 
 def send_email(subject, recipient, template, **kwargs):
+    """Sends an email using a specified HTML template with a timeout."""
     msg = Message(subject, recipients=[recipient])
     msg.html = render_template(f'emails/{template}.html', **kwargs)
+
     try:
+
         with app.app_context():
-            mail.send(msg)
+            with mail.connect(timeout=5) as conn:
+                conn.send(msg)
         return True
+    except socket.timeout as e:
+        print(f"EMAIL FAILED: Connection timed out. Error: {e}")
+        return False
     except Exception as e:
-        print(f"EMAIL FAILED TO SEND. Error: {e}")
+        print(f"EMAIL FAILED: General SMTP Error. Error: {e}")
         return False
 
 

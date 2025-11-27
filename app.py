@@ -41,12 +41,10 @@ login_manager.login_message_category = 'error'
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(100), unique=True, nullable=False)
-    name = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(100), nullable=False)
     profile_pic = db.Column(db.String(100), nullable=True)
     recovery_answer = db.Column(db.String(100), nullable=False)
-
     reset_token = db.Column(db.String(100), nullable=True, unique=True)
     token_expiration = db.Column(db.DateTime, nullable=True)
 
@@ -106,40 +104,41 @@ def generate_reset_token(user):
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        username = request.form.get('username')
+        email_addr = request.form.get('email')
         password = request.form.get('password')
-        user = User.query.filter_by(username=username).first()
+        user = User.query.filter_by(email=email_addr).first()
         if user and check_password_hash(user.password, password):
             login_user(user)
             flash('Login successful!', 'success')
             return redirect(url_for('dashboard'))
         else:
-            flash('Invalid username or password', 'error')
+            flash('Invalid email or password', 'error')
     return render_template('login.html')
 
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        username = request.form.get('username')
+        email_addr = request.form.get('email')  # <--- USING EMAIL
         name = request.form.get('name')
         password = request.form.get('password')
         recovery = request.form.get('recovery_answer').lower().strip()
-        user = User.query.filter_by(username=username).first()
+        user = User.query.filter_by(
+            email=email_addr).first()  # <--- QUERY BY EMAIL
         if user:
-            flash('Username already exists', 'error')
+            flash('Email already registered', 'error')
             return redirect(url_for('register'))
 
         new_user = User(
-            username=username, name=name, recovery_answer=recovery,
+            email=email_addr, name=name, recovery_answer=recovery,  # <--- SAVE EMAIL
             password=generate_password_hash(password, method='pbkdf2:sha256')
         )
         db.session.add(new_user)
         db.session.commit()
 
         send_email(
-            subject="Welcome to Book-Management-APP!", recipient=app.config['MAIL_USERNAME'],
-            template='welcome_mail', name=name, username=username
+            subject="Welcome to Book-Management-APP!", recipient=email_addr,
+            template='welcome_mail', name=name, username=email_addr
         )
 
         login_user(new_user)

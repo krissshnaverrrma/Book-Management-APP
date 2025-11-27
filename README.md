@@ -2,6 +2,14 @@
 
 This is a Flask-based Book Management Application designed to help users manage their personal or small library collections. It integrates with the Google Books API for easy book discovery and includes user authentication, profile management, and PDF report generation.
 
+## 📸 Screenshot
+
+Here's a glimpse of the Book-Management-APP dashboard:
+
+![Book-Management-APP Dashboard](static/images/dashboard-screenshot.png)
+
+*(You will need to replace `static/images/dashboard-screenshot.png` with the actual path to your image file once you've saved it.)*
+
 ## ✨ Features
 
 -   **User Authentication:** Secure login, registration, and password reset functionality with email-based token verification.
@@ -50,20 +58,7 @@ Follow these steps to set up and run the application locally.
     pip install -r requirements.txt
     ```
     *(If `requirements.txt` doesn't exist, create it with `pip freeze > requirements.txt` after installing Flask, Flask-SQLAlchemy, Flask-Login, Flask-Mail, FPDF, Werkzeug, requests, python-dotenv (if used), secrets)*
-
-### Configuration
-
-Before running, you need to configure your email settings and a secret key:
-
-1.  **Open `app.py`** and update the following lines with your details:
-    ```python
-    app.config['SECRET_KEY'] = 'YOUR_SECRET_KEY_PASTE_HERE'
-    app.config['MAIL_USERNAME'] = 'YOUR_EMAIL_ADDRESS@gmail.com'
-    app.config['MAIL_PASSWORD'] = 'YOUR_GENERATED_APP_PASSWORD' (required for 2FA)
-    app.config['MAIL_DEFAULT_SENDER'] = 'YOUR_EMAIL_ADDRESS@gmail.com'
-    ```
-    * **Google App Password:** If you use 2-Factor Authentication, you MUST generate an [App Password](https://support.google.com/accounts/answer/185833) from your Google Account security settings. Regular passwords will not work.
-
+    
 ### Running the Application
 
 1.  **Ensure your virtual environment is active.**
@@ -76,16 +71,6 @@ Before running, you need to configure your email settings and a secret key:
     ```bash
     flask run --debug
     ```
-
-4.  Open your web browser and navigate to `http://127.0.0.1:5000`.
-
-## 📸 Screenshot
-
-Here's a glimpse of the Book-Management-APP dashboard:
-
-![Book-Management-APP Dashboard](static/images/dashboard-screenshot.png)
-
-*(You will need to replace `static/images/dashboard-screenshot.png` with the actual path to your image file once you've saved it.)*
 
 ## 🙋 Contact
 Development

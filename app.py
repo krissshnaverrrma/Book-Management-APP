@@ -1,4 +1,5 @@
 import os
+from dotenv import load_dotenv
 from flask import Flask, render_template, request, redirect, url_for, jsonify, flash, send_file
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
@@ -10,10 +11,12 @@ from flask_mail import Mail, Message
 from datetime import datetime, timedelta
 import secrets
 
+load_dotenv()
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///library.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = 'a5666543a69c7de31845a37b3425b75e8eb8afaada64913f'
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 
 app.config['UPLOAD_FOLDER'] = 'static/pdfs'
 app.config['PROFILE_FOLDER'] = 'static/profiles'
@@ -23,9 +26,9 @@ os.makedirs(app.config['PROFILE_FOLDER'], exist_ok=True)
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 'krishna1290verma@gmail.com'
-app.config['MAIL_PASSWORD'] = 'swts jhxw awpx ursq'
-app.config['MAIL_DEFAULT_SENDER'] = 'krishna1290verma@gmail.com'
+app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME')
+app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
+app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('MAIL_USERNAME')
 
 db = SQLAlchemy(app)
 mail = Mail(app)

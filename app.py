@@ -84,7 +84,7 @@ def send_email(subject, recipient, template, **kwargs):
     try:
 
         with app.app_context():
-            with mail.connect(timeout=5) as conn:
+            with mail.connect as conn:
                 conn.send(msg)
         return True
     except socket.timeout as e:

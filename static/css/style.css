@@ -114,3 +114,10 @@ body {
 .app-footer a:hover {
     color: gray !important;
 }
+
+.search-results-scroll {
+    max-height: 40vh;
+    overflow-y: auto;
+    padding-bottom: 15px;
+    padding-right: 10px;
+}

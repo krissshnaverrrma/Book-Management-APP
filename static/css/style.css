@@ -23,6 +23,41 @@ body {
     overflow-y: hidden;
 }
 
+.main-content-scroll {
+    width: 100vw;
+    max-height: calc(100vh - 100px);
+    overflow-y: auto !important;
+    overflow-x: hidden;
+    padding: 0;
+    margin: 0;
+}
+
+.main-content-scroll::-webkit-scrollbar,
+.table-responsive::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    background: transparent;
+}
+
+
+.main-content-scroll::-webkit-scrollbar-thumb,
+.table-responsive::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+}
+
+.main-content-scroll::-webkit-scrollbar-thumb:hover,
+.table-responsive::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.main-content-scroll::-webkit-scrollbar-track,
+.table-responsive::-webkit-scrollbar-track {
+    background: transparent;
+}
+
 .glass-card {
     background: var(--glass-bg);
     backdrop-filter: var(--glass-blur);
@@ -116,7 +151,7 @@ body {
 }
 
 .search-results-scroll {
-    max-height: 40vh;
+    max-height: 450px;
     overflow-y: auto;
     padding-bottom: 15px;
     padding-right: 10px;

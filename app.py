@@ -3,7 +3,7 @@ from flask import Flask, render_template, request, redirect, url_for, jsonify, f
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
 from fpdf import FPDF
 import io
 from flask_mail import Mail, Message
@@ -41,12 +41,10 @@ login_manager.login_message_category = 'error'
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(100), unique=True, nullable=False)
-    email = db.Column(db.String(100), unique=True, nullable=False)
     name = db.Column(db.String(100), nullable=False)
     password = db.Column(db.String(100), nullable=False)
     profile_pic = db.Column(db.String(100), nullable=True)
-    recovery_answer = db.Column(db.String(100), nullable=False)
-
+    # Fields for email-based password recovery
     reset_token = db.Column(db.String(100), nullable=True, unique=True)
     token_expiration = db.Column(db.DateTime, nullable=True)
 
@@ -115,20 +113,15 @@ def login():
 def register():
     if request.method == 'POST':
         username = request.form.get('username')
-        email = request.form.get('email')
         name = request.form.get('name')
         password = request.form.get('password')
-        recovery = request.form.get('recovery_answer').lower().strip()
-        
-        user_exists = User.query.filter((User.username == username) | (User.email == email)).first()
-        if user_exists:
-            flash('Username or Email already registered', 'error')
+        user = User.query.filter_by(username=username).first()
+        if user:
+            flash('Username already exists', 'error')
             return redirect(url_for('register'))
 
         new_user = User(
-            username=username, 
-            email=email,
-            name=name, recovery_answer=recovery,
+            username=username, name=name,
             password=generate_password_hash(password, method='pbkdf2:sha256')
         )
         db.session.add(new_user)
@@ -197,6 +190,7 @@ def reset_password(token):
         user.token_expiration = None
         db.session.commit()
 
+        # NOTE: This template must exist in templates/emails/
         send_email(
             subject="Password Changed Successfully",
             recipient=app.config['MAIL_USERNAME'],

@@ -87,8 +87,12 @@ Here's a glimpse of the Book-Management-APP dashboard:
 
 *(You will need to replace `static/images/dashboard-screenshot.png` with the actual path to your image file once you've saved it.)*
 
-## 🧑‍💻 Development
-
-Developed by [Krishna Verma](https://www.linkedin.com/in/krishnaverma/)(https://github.com/krissshnaverrrma).
+## 🙋 Contact
+Development
+For questions or feedback, please reach out to:
+* **Developer:** Krishna Verma
+* **GitHub:** [https://github.com/krissshnaverrrma]
+* **Linkedin** [https://www.linkedin.com/in/krishna-verma-43aa85315/]
+* **Email:** [krishnav24-cs@sanskar.org]
 
 ---

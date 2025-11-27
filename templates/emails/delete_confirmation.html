@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            background-color: #dc3545;
+            color: white;
+            padding: 15px;
+            border-radius: 6px 6px 0 0;
+            text-align: center;
+        }
+
+        .content {
+            padding: 20px 0;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .details {
+            background-color: #f8d7da;
+            padding: 10px;
+            border-radius: 5px;
+            color: #721c24;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>📚 Account Deletion Confirmed</h2>
+        </div>
+        <div class="content">
+            <p>Hello {{ username }},</p>
+            <p>This email confirms that your account with **Book-Management-APP** has been **permanently and
+                successfully deleted** as requested.</p>
+
+            <div class="details">
+                <strong>Username Deleted:</strong> {{ username }}<br>
+            </div>
+
+            <p style="margin-top: 20px;">All associated data and uploaded files have been removed from our servers.</p>
+            <p>Thank you for using our service.</p>
+            <p style="margin-top: 30px;">Best Regards,<br>
+                The Book-Management-APP Team</p>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book-Management-APP</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+</head>
+
+<body style="overflow-y: hidden;">
+    <img src="{{ url_for('static', filename='images/website-background.png') }}" class="site-background">
+
+    <div class="container pt-3 pb-3">
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="row justify-content-center mb-1">
+            <div class="col-md-10">
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category == 'error' and 'danger' or category }}" role="alert">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        <div class="d-flex justify-content-end mb-3">
+            <a href="/profile" class="text-decoration-none">
+                <div class="glass-card d-inline-flex align-items-center px-4 py-2"
+                    style="border-radius: 50px; transition: transform 0.2s;">
+                    {% if current_user.profile_pic %}
+                    <img src="{{ url_for('static', filename='profiles/' + current_user.profile_pic) }}" alt="Profile"
+                        class="rounded-circle me-2"
+                        style="width: 35px; height: 35px; object-fit: cover; border: 2px solid white;">
+                    {% else %}
+                    <i class="fas fa-user-circle fa-2x text-white me-2"></i>
+                    {% endif %}
+                    <span class="text-white fw-bold me-3">{{ current_user.username }}</span>
+                    <div style="width: 1px; height: 20px; background: rgba(255,255,255,0.3); margin-right: 15px;"></div>
+                    <object><a href="/logout" class="text-danger text-decoration-none fw-bold small">
+                            <i class="fas fa-sign-out-alt me-1"></i> Logout
+                        </a></object>
+                </div>
+            </a>
+        </div>
+
+        <div class="glass-card hero-section text-center mb-4" style="padding: 30px 0;">
+            <h1 class="display-4 fw-bold mb-2 text-white"><i class="fas fa-book-reader me-2"></i>Book-Management-APP
+            </h1>
+            <p class="lead mb-4 text-white-50 small">The intelegent book managing APP.</p>
+
+            <div class="search-container" style="max-width: 500px; margin: 0 auto;">
+                <input type="text" id="searchInput" class="search-input"
+                    placeholder="Search by Title, ISBN, or Author...">
+                <button onclick="searchGoogleBooks()" class="search-btn">
+                    <i class="fas fa-search me-2"></i>Search
+                </button>
+            </div>
+        </div>
+
+        <div class="row mb-4 text-center">
+            <div class="col-md-4">
+                <div class="glass-card p-3 h-100">
+                    <h1 class="display-5 fw-bold text-white">{{ total_books }}</h1>
+                    <p class="text-white-50 mb-0 small">Total Inventory</p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="glass-card p-3 h-100">
+                    <h1 class="display-5 fw-bold text-success">{{ available_books }}</h1>
+                    <p class="text-white-50 mb-0 small">Currently Available</p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="glass-card p-3 h-100">
+                    <h1 class="display-5 fw-bold text-warning">{{ borrowed_books }}</h1>
+                    <p class="text-white-50 mb-0 small">Currently Borrowed</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="resultsArea" style="display: none;">
+            <h4 class="mb-3 text-white">Search Results</h4>
+            <div class="row" id="resultsGrid"></div>
+        </div>
+
+        <div class="library-section glass-card p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3 border-bottom border-secondary pb-3">
+                <h3 class="fw-bold m-0 text-white">My Collection</h3>
+
+                <div>
+                    <span class="badge bg-dark border border-secondary rounded-pill px-3 py-2 me-2">
+                        {% if books|length == 0 %} 0 {% else %} {{ books|length }} {% endif %} Books
+                    </span>
+                    <a href="/download_report" class="btn btn-outline-light rounded-pill px-4 me-2">
+                        <i class="fas fa-file-pdf me-2"></i>Report
+                    </a>
+                </div>
+            </div>
+
+            <div class="table-responsive" style="max-height: 40vh; overflow-y: auto;">
+                <table class="table table-dark table-hover align-middle" style="background: transparent;">
+                    <thead>
+                        <tr class="text-white-50 small text-uppercase">
+                            <th>Title / Author</th>
+                            <th>Category</th>
+                            <th>Status</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for book in books %}
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    {% if book.pdf_file %}
+                                    <a href="{{ url_for('static', filename='pdfs/' + book.pdf_file) }}" target="_blank"
+                                        class="text-white me-2" title="View PDF">
+                                        <i class="fas fa-file-pdf fa-lg"></i>
+                                    </a>
+                                    {% else %}
+                                    <i class="fas fa-book fa-lg text-white-50 me-2" title="No PDF"></i>
+                                    {% endif %}
+                                    <div>
+                                        <div class="fw-bold text-white">{{ book.title }}</div>
+                                        <div class="text-white-50 small">{{ book.author }}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="badge-category">{{ book.category }}</span></td>
+                            <td>
+                                {% if book.status == 'Available' %}
+                                <span
+                                    class="badge bg-success bg-opacity-25 text-success border border-success rounded-pill px-3">Available</span>
+                                {% else %}
+                                <span
+                                    class="badge bg-warning bg-opacity-25 text-warning border border-warning rounded-pill px-3">Borrowed</span>
+                                {% endif %}
+                            </td>
+                            <td class="text-end">
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <footer class="app-footer">
+        <div class="container text-center py-2">
+            <span>Developed by Krishna Verma</span>
+            <a href="https://github.com/krissshnaverrrma" target="_blank" class="ms-3">
+                <i class="fab fa-github fa-lg"></i>
+            </a>
+            <a href="https://www.linkedin.com/in/krishna-verma-43aa85315/" target="_blank" class="ms-3">
+                <i class="fab fa-linkedin-in fa-lg"></i>
+            </a>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

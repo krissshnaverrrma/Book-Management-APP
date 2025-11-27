@@ -1,0 +1,116 @@
+:root {
+    --glass-bg: rgba(0, 0, 0, 0.65);
+    --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+    --glass-blur: blur(25px);
+}
+
+
+.site-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+    filter: brightness(0.6);
+}
+
+body {
+    background: transparent;
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow-y: hidden;
+}
+
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: var(--glass-border);
+    border-radius: 25px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+    color: white;
+}
+
+.search-container {
+    background: rgba(255, 255, 255, 0.1);
+    border: var(--glass-border);
+    border-radius: 60px;
+    padding: 5px;
+    display: flex;
+    max-width: 500px;
+    margin: 0 auto;
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.search-input {
+    border: none;
+    background: transparent;
+    flex-grow: 1;
+    padding: 15px 25px;
+    font-size: 1.1rem;
+    outline: none;
+    color: white;
+}
+
+.search-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.search-btn {
+    border-radius: 50px;
+    padding: 12px 40px;
+    font-weight: 600;
+    border: none;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    transition: all 0.3s;
+}
+
+.table-dark {
+    --bs-table-bg: transparent;
+    --bs-table-hover-bg: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.badge-category {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-weight: 500;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.constrained-table-container {
+    max-height: 45vh;
+    overflow-y: auto;
+    padding-right: 8px;
+}
+
+.app-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: none;
+    backdrop-filter: blur(5px);
+    color: #ccc;
+    z-index: 10;
+    font-size: 0.9rem;
+}
+
+.app-footer span {
+    vertical-align: middle;
+}
+
+.app-footer a {
+    color: #fff !important;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.app-footer a:hover {
+    color: gray !important;
+}

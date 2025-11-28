@@ -8,8 +8,6 @@ Here's a glimpse of the Book-Management-APP dashboard:
 
 ![Book-Management-APP Dashboard](static/images/dashboard-screenshot.png)
 
-*(You will need to replace `static/images/dashboard-screenshot.png` with the actual path to your image file once you've saved it.)*
-
 ## ✨ Features
 
 -   **User Authentication:** Secure login, registration, and password reset functionality with email-based token verification.
@@ -79,5 +77,6 @@ For questions or feedback, please reach out to:
 * **GitHub:** [https://github.com/krissshnaverrrma]
 * **Linkedin** [https://www.linkedin.com/in/krishna-verma-43aa85315/]
 * **Email:** [krishnav24-cs@sanskar.org]
+
 
 ---
